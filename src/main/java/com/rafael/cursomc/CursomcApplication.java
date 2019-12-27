@@ -13,6 +13,7 @@ import com.rafael.cursomc.domain.Cidade;
 import com.rafael.cursomc.domain.Cliente;
 import com.rafael.cursomc.domain.Endereco;
 import com.rafael.cursomc.domain.Estado;
+import com.rafael.cursomc.domain.ItemPedido;
 import com.rafael.cursomc.domain.Pagamento;
 import com.rafael.cursomc.domain.PagamentoComBoleto;
 import com.rafael.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.rafael.cursomc.repositories.CidadeRepository;
 import com.rafael.cursomc.repositories.ClienteRepository;
 import com.rafael.cursomc.repositories.EnderecoRepository;
 import com.rafael.cursomc.repositories.EstadoRepository;
+import com.rafael.cursomc.repositories.ItemPedidoRepository;
 import com.rafael.cursomc.repositories.PagamentoRepository;
 import com.rafael.cursomc.repositories.PedidoRepository;
 import com.rafael.cursomc.repositories.ProdutoRepository;
@@ -40,6 +42,7 @@ public class CursomcApplication implements CommandLineRunner{
 	@Autowired private EnderecoRepository endRepo;
 	@Autowired private PedidoRepository pedRepo;
 	@Autowired private PagamentoRepository pagRepo;
+	@Autowired private ItemPedidoRepository itemPedRepo;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -94,6 +97,7 @@ public class CursomcApplication implements CommandLineRunner{
 		cliRepo.saveAll(Arrays.asList(cli1));
 		endRepo.saveAll(Arrays.asList(e1,e2));
 		
+		/**INSTANCIA DE PEDIDO e PAGAMENTO**/
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
 		
@@ -112,6 +116,20 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		pedRepo.saveAll(Arrays.asList(ped1,ped2));
 		pagRepo.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		/**INSTANCIA DE ITEM PEDIDO**/
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00,1,2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2 , 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1 ,800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedRepo.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 
 }
